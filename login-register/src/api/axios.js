@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export default axios.create({
-	baseURL: 'http://localhost:3500',
+	baseURL: 'https://kangtong1105.codns.com:8000',
 });

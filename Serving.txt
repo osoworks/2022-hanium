@@ -1,0 +1,19 @@
+Serving!                                       
+   │                                                  
+   │   - Local:            http://localhost:3000      
+   │   - On Your Network:  http://192.168.85.1:3000   
+   │                                                  
+   │   Copied local address to clipboard!  
+
+> 메모장
+
+Serving!                                        
+   │                                                   
+   │   - Local:            http://localhost:53254      
+   │   - On Your Network:  http://192.168.85.1:53254   
+   │                                                   
+   │   This port was picked because 3000 is in use.    
+   │                                                   
+   │   Copied local address to clipboard!
+
+> 로그인
