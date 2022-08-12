@@ -9,22 +9,27 @@ import Login from './Login';
 import axios from './api/axios';
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = '/register';
+const email_REGEX = /^[a-z0-9\.\-_]+@([a-z0-9\-]+\.)+[a-z]{2,6}$/;
+const password_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const REGISTER_URL = 'https://kangtong1105.codns.com:8000/auth/signup';
 
 const Register = () => {
 	const userRef = useRef();
 	const errRef = useRef();
 
-	const [user, setUser] = useState('');
+	const [username, setUser] = useState('');
 	const [validName, setValidName] = useState(false);
 	const [userFocus, setUserFocus] = useState(false);
 
-	const [pwd, setPwd] = useState('');
-	const [validPwd, setValidPwd] = useState(false);
-	const [pwdFocus, setPwdFocus] = useState(false);
+	const [email, setEmail] = useState('');
+	const [validEmail, setValidEmail] = useState(false);
+	const [emailFocus, setEmailFocus] = useState(false);
 
-	const [matchPwd, setMatchPwd] = useState('');
+	const [password, setPassword] = useState('');
+	const [validpassword, setValidpassword] = useState(false);
+	const [passwordFocus, setPasswordFocus] = useState(false);
+
+	const [matchpassword, setMatchpassword] = useState('');
 	const [validMatch, setValidMatch] = useState(false);
 	const [matchFocus, setMatchFocus] = useState(false);
 
@@ -36,31 +41,36 @@ const Register = () => {
 	}, []);
 
 	useEffect(() => {
-		setValidName(USER_REGEX.test(user));
-	}, [user]);
+		setValidName(USER_REGEX.test(username));
+	}, [username]);
 
 	useEffect(() => {
-		setValidPwd(PWD_REGEX.test(pwd));
-		setValidMatch(pwd === matchPwd);
-	}, [pwd, matchPwd]);
+		setValidEmail(email_REGEX.test(email));
+	}, [username]);
+
+	useEffect(() => {
+		setValidpassword(password_REGEX.test(password));
+		setValidMatch(password === matchpassword);
+	}, [password, matchpassword]);
 
 	useEffect(() => {
 		setErrMsg('');
-	}, [user, pwd, matchPwd]);
+	}, [username, password, matchpassword]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		// if button enabled with JS hack
-		const v1 = USER_REGEX.test(user);
-		const v2 = PWD_REGEX.test(pwd);
-		if (!v1 || !v2) {
+		const v1 = USER_REGEX.test(username);
+		const v2 = email_REGEX.test(email);
+		const v3 = password_REGEX.test(password);
+		if (!v1 || !v3) {
 			setErrMsg('Invalid Entry');
 			return;
 		}
 		try {
 			const response = await axios.post(
 				REGISTER_URL,
-				JSON.stringify({ user, pwd }),
+				JSON.stringify({ username, email, password }),
 				{
 					headers: { 'Content-Type': 'application/json' },
 					withCredentials: true,
@@ -71,8 +81,8 @@ const Register = () => {
 			setSuccess(true);
 			//clear state and controlled inputs
 			setUser('');
-			setPwd('');
-			setMatchPwd('');
+			setPassword('');
+			setMatchpassword('');
 		} catch (err) {
 			if (!err?.response) {
 				setErrMsg('No Server Response');
@@ -108,7 +118,7 @@ const Register = () => {
 							/>
 							<FontAwesomeIcon
 								icon={faTimes}
-								className={validName || !user ? 'hide' : 'invalid'}
+								className={validName || !username ? 'hide' : 'invalid'}
 							/>
 						</label>
 						<input
@@ -117,17 +127,17 @@ const Register = () => {
 							ref={userRef}
 							autoComplete="off"
 							onChange={(e) => setUser(e.target.value)}
-							value={user}
+							value={username}
 							required
 							aria-invalid={validName ? 'false' : 'true'}
 							aria-describedby="uidnote"
-							onFocus={() => setUserFocus(true)}
-							onBlur={() => setUserFocus(false)}
+							onFocus={() => setEmailFocus(true)}
+							onBlur={() => setEmailFocus(false)}
 						/>
 						<p
 							id="uidnote"
 							className={
-								userFocus && user && !validName ? 'instructions' : 'offscreen'
+								emailFocus && email && !validEmail ? 'instructions' : 'offscreen'
 							}
 						>
 							<FontAwesomeIcon icon={faInfoCircle} />
@@ -138,31 +148,69 @@ const Register = () => {
 							Letters, numbers, underscores, hyphens allowed.
 						</p>
 
+
+						<label htmlFor="email">
+							Email:
+							<FontAwesomeIcon
+								icon={faCheck}
+								className={validName ? 'valid' : 'hide'}
+							/>
+							<FontAwesomeIcon
+								icon={faTimes}
+								className={validName || !email ? 'hide' : 'invalid'}
+							/>
+						</label>
+						<input
+							type="text"
+							id="email"
+							ref={userRef}
+							autoComplete="off"
+							onChange={(e) => setEmail(e.target.value)}
+							value={email}
+							required
+							aria-invalid={validEmail ? 'false' : 'true'}
+							aria-describedby="emailnote"
+							onFocus={() => setUserFocus(true)}
+							onBlur={() => setUserFocus(false)}
+						/>
+						<p
+							id="emailnote"
+							className={
+								userFocus && username && !validName ? 'instructions' : 'offscreen'
+							}
+						>
+							<FontAwesomeIcon icon={faInfoCircle} />
+							Write your email address.
+							<br />
+							Only email-form is allowed.
+						</p>
+
+
 						<label htmlFor="password">
 							Password:
 							<FontAwesomeIcon
 								icon={faCheck}
-								className={validPwd ? 'valid' : 'hide'}
+								className={validpassword ? 'valid' : 'hide'}
 							/>
 							<FontAwesomeIcon
 								icon={faTimes}
-								className={validPwd || !pwd ? 'hide' : 'invalid'}
+								className={validpassword || !password ? 'hide' : 'invalid'}
 							/>
 						</label>
 						<input
 							type="password"
 							id="password"
-							onChange={(e) => setPwd(e.target.value)}
-							value={pwd}
+							onChange={(e) => setPassword(e.target.value)}
+							value={password}
 							required
-							aria-invalid={validPwd ? 'false' : 'true'}
-							aria-describedby="pwdnote"
-							onFocus={() => setPwdFocus(true)}
-							onBlur={() => setPwdFocus(false)}
+							aria-invalid={validpassword ? 'false' : 'true'}
+							aria-describedby="passwordnote"
+							onFocus={() => setPasswordFocus(true)}
+							onBlur={() => setPasswordFocus(false)}
 						/>
 						<p
-							id="pwdnote"
-							className={pwdFocus && !validPwd ? 'instructions' : 'offscreen'}
+							id="passwordnote"
+							className={passwordFocus && !validpassword ? 'instructions' : 'offscreen'}
 						>
 							<FontAwesomeIcon icon={faInfoCircle} />
 							8 to 24 characters.
@@ -178,22 +226,22 @@ const Register = () => {
 							<span aria-label="percent">%</span>
 						</p>
 
-						<label htmlFor="confirm_pwd">
+						<label htmlFor="confirm_password">
 							Confirm Password:
 							<FontAwesomeIcon
 								icon={faCheck}
-								className={validMatch && matchPwd ? 'valid' : 'hide'}
+								className={validMatch && matchpassword ? 'valid' : 'hide'}
 							/>
 							<FontAwesomeIcon
 								icon={faTimes}
-								className={validMatch || !matchPwd ? 'hide' : 'invalid'}
+								className={validMatch || !matchpassword ? 'hide' : 'invalid'}
 							/>
 						</label>
 						<input
 							type="password"
-							id="confirm_pwd"
-							onChange={(e) => setMatchPwd(e.target.value)}
-							value={matchPwd}
+							id="confirm_password"
+							onChange={(e) => setMatchpassword(e.target.value)}
+							value={matchpassword}
 							required
 							aria-invalid={validMatch ? 'false' : 'true'}
 							aria-describedby="confirmnote"
@@ -211,7 +259,7 @@ const Register = () => {
 						</p>
 
 						<button
-							disabled={!validName || !validPwd || !validMatch ? true : false}
+							disabled={!validName || !validpassword || !validMatch ? true : false}
 						>
 							Sign Up
 						</button>
