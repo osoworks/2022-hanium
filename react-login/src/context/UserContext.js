@@ -4,7 +4,7 @@ import axios from 'axios'
 export const UserContext = createContext();
 
 export const Axios = axios.create({
-    baseURL: 'https://localhost:8000',
+    baseURL: 'https://kangtong1105.codns.com:8000/',
 });
 
 axios.defaults.withCredentials = true;

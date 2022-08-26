@@ -38,7 +38,7 @@ const Login = () => {
 
     return (
         <div className="myform">
-            <h2>Login</h2>
+            <h2>로그인</h2>
             <form onSubmit={submitForm}>
                 <label htmlFor="email">Email:</label>
                 <input type="email" name="email" onChange={onChangeInput} placeholder="Your email" id="email" />

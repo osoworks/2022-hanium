@@ -1,6 +1,7 @@
 import {useContext, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {UserContext} from '../context/UserContext';
+
 const Register = () => {
     const {registerUser, wait} = useContext(UserContext);
     const [errMsg, setErrMsg] = useState(false);
@@ -42,7 +43,7 @@ const Register = () => {
 
     return (
         <div className="myform">
-            <h2>Sign Up</h2>
+            <h2>회원가입</h2>
             <form onSubmit={submitForm}>
                 <label htmlFor="username">Name:</label>
                 <input type="text" name="username" onChange={onChangeInput} placeholder="Your username" id="username" />
